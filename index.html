@@ -19,15 +19,62 @@
             attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        // Agrega el polígono del municipio de San Javier
-        const sanJavierBounds = [
-            [-16.57697, -62.70447],
-            [-15.84114, -62.58499],
-            [-16.245, -62.27325],
-            [-16.57697, -62.65091]
-        ];
-        L.polygon(sanJavierBounds, { color: 'blue', weight: 2, fillOpacity: 0.1 }).addTo(map);
+        // Objeto GeoJSON del polígono de San Javier (integrado en el código)
+        const sanJavierGeoJSON = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [
+                                    -62.70447,
+                                    -16.57697
+                                ],
+                                [
+                                    -62.27325,
+                                    -15.84114
+                                ],
+                                [
+                                    -62.27325,
+                                    -15.84114
+                                ],
+                                [
+                                    -62.27325,
+                                    -15.84114
+                                ],
+                                [
+                                    -62.27325,
+                                    -15.84114
+                                ],
+                                [
+                                    -62.65091,
+                                    -16.57697
+                                ],
+                                [
+                                    -62.70447,
+                                    -16.57697
+                                ]
+                            ]
+                        ]
+                    }
+                }
+            ]
+        };
 
+        // Dibuja el polígono del GeoJSON
+        L.geoJSON(sanJavierGeoJSON, {
+            style: {
+                color: 'blue',
+                weight: 2,
+                fillOpacity: 0.1
+            }
+        }).addTo(map);
+
+        // Fetch de los focos de calor desde la API de NASA FIRMS
         const firmsApiUrl = "https://firms.modaps.eosdis.nasa.gov/api/area/csv?bbox=-62.70447,-16.57697,-62.27325,-15.84114&satellite=VIIRS&timeframe=24h";
 
         fetch(firmsApiUrl)
