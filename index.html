@@ -1,106 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Alerta de Focos San Javier</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <title>Visualización de Coordenadas</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        #map { height: 100vh; width: 100vw; }
+        #map {
+            height: 600px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
+
+    <h1>Visualización de Coordenadas</h1>
     <div id="map"></div>
-    <script>
-        const map = L.map('map').setView([-16.27, -62.50], 9);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
 
-        // Objeto GeoJSON del polígono de San Javier (integrado en el código)
-        const sanJavierGeoJSON = {
-            "type": "FeatureCollection",
-            "features": [
-                {
-                    "type": "Feature",
-                    "properties": {},
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [
-                                    -62.70447,
-                                    -16.57697
-                                ],
-                                [
-                                    -62.27325,
-                                    -15.84114
-                                ],
-                                [
-                                    -62.27325,
-                                    -15.84114
-                                ],
-                                [
-                                    -62.27325,
-                                    -15.84114
-                                ],
-                                [
-                                    -62.27325,
-                                    -15.84114
-                                ],
-                                [
-                                    -62.65091,
-                                    -16.57697
-                                ],
-                                [
-                                    -62.70447,
-                                    -16.57697
-                                ]
-                            ]
-                        ]
-                    }
-                }
-            ]
-        };
-
-        // Dibuja el polígono del GeoJSON
-        L.geoJSON(sanJavierGeoJSON, {
-            style: {
-                color: 'blue',
-                weight: 2,
-                fillOpacity: 0.1
-            }
-        }).addTo(map);
-
-        // Fetch de los focos de calor desde la API de NASA FIRMS
-        const firmsApiUrl = "https://firms.modaps.eosdis.nasa.gov/api/area/csv?bbox=-62.70447,-16.57697,-62.27325,-15.84114&satellite=VIIRS&timeframe=24h";
-
-        fetch(firmsApiUrl)
-            .then(response => response.text())
-            .then(csv => {
-                const lines = csv.split('\n');
-                const headers = lines[0].split(',');
-                for (let i = 1; i < lines.length; i++) {
-                    const values = lines[i].split(',');
-                    if (values.length === headers.length) {
-                        const foco = {};
-                        headers.forEach((h, j) => {
-                            foco[h.trim()] = values[j].trim();
-                        });
-
-                        L.circleMarker([foco.latitude, foco.longitude], {
-                            radius: 8,
-                            color: 'red',
-                            fillColor: '#f03',
-                            fillOpacity: 0.5
-                        }).addTo(map)
-                        .bindPopup(`<b>Foco de calor</b><br>Intensidad: ${foco.brightness}<br>Hora: ${foco.acq_time}`);
-                    }
-                }
-            })
-            .catch(error => console.error('Error al obtener los datos:', error));
-    </script>
-</body>
+    <script src="main.js"></script> </body>
 </html>
