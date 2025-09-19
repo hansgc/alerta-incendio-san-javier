@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Visualización de Coordenadas</title>
+    <title>Visualización de Coordenadas de San Javier</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         #map {
             height: 600px;
@@ -13,8 +12,29 @@
 </head>
 <body>
 
-    <h1>Visualización de Coordenadas</h1>
+    <h1>Visualización de Incendios en San Javier</h1>
     <div id="map"></div>
 
-    <script src="main.js"></script> </body>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // 1. Inicializa el mapa
+        const map = L.map('map').setView([-30.4137, -64.2152], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // 2. ✅ PEGA AQUÍ EL CONTENIDO DE TODO TU ARCHIVO GEOJSON
+        // Por ejemplo, si tu archivo se llama "san-javier.geojson",
+        // abre ese archivo, copia todo el texto y pégalo justo debajo de este comentario.
+        // No incluyas nada más.
+        const geojsonData = {
+          // PEGA AQUÍ EL TEXTO DE TU ARCHIVO GEOJSON
+        };
+        
+        // 3. Dibuja los datos en el mapa
+        L.geoJSON(geojsonData).addTo(map);
+    </script>
+
+</body>
 </html>
