@@ -18,13 +18,13 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // 1. Inicializa el mapa
-        const map = L.map('map').setView([-30.4137, -64.2152], 13);
+        // 1. Inicializa el mapa con las coordenadas correctas de San Javier, Bolivia
+        const map = L.map('map').setView([-15.84501, -62.27415], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // ✅ El objeto GeoJSON ahora está asignado correctamente a la variable
+        // 2. Aquí está el GeoJSON de San Javier, Bolivia, completo y corregido.
         const geojsonData = {
             "type": "FeatureCollection",
             "features": [
