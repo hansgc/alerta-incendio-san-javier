@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Mapa de Prueba</title>
+    <title>Alerta de Focos San Javier</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
@@ -14,7 +14,45 @@
     <div id="map"></div>
     <script>
         const map = L.map('map').setView([-16.27, -62.50], 9);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        const sanJavierBounds = [
+            [-16.57697, -62.70447],
+            [-15.84114, -62.58499],
+            [-16.245, -62.27325],
+            [-16.57697, -62.65091]
+        ];
+        L.polygon(sanJavierBounds, { color: 'blue', weight: 2, fillOpacity: 0.1 }).addTo(map);
+
+        const firmsApiUrl = "https://firms.modaps.eosdis.nasa.gov/api/area/csv?bbox=-62.70447,-16.57697,-62.27325,-15.84114&satellite=VIIRS&timeframe=24h";
+
+        fetch(firmsApiUrl)
+            .then(response => response.text())
+            .then(csv => {
+                const lines = csv.split('\n');
+                const headers = lines[0].split(',');
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',');
+                    if (values.length === headers.length) {
+                        const foco = {};
+                        headers.forEach((h, j) => {
+                            foco[h.trim()] = values[j].trim();
+                        });
+
+                        L.circleMarker([foco.latitude, foco.longitude], {
+                            radius: 8,
+                            color: 'red',
+                            fillColor: '#f03',
+                            fillOpacity: 0.5
+                        }).addTo(map)
+                        .bindPopup(`<b>Foco de calor</b><br>Intensidad: ${foco.brightness}<br>Hora: ${foco.acq_time}`);
+                    }
+                }
+            })
+            .catch(error => console.error('Error al obtener los datos:', error));
     </script>
 </body>
 </html>
